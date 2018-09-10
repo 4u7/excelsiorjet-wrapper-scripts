@@ -62,13 +62,13 @@ declare -a kotlin_app
 
 if [ -n "$KOTLIN_RUNNER" ];
 then
-    java_args=("${java_args[@]}" "-Dkotlin.home=${KOTLIN_HOME}")
-    kotlin_app=("${KOTLIN_HOME}/lib/kotlin-runner.jar" "org.jetbrains.kotlin.runner.Main")
+    echo "Kotlin runner is not supported."
+    exit 1
 else
     [ -n "$KOTLIN_COMPILER" ] || KOTLIN_COMPILER=org.jetbrains.kotlin.cli.jvm.K2JVMCompiler
-    java_args=("${java_args[@]}" "-noverify")
-
-    kotlin_app=("${KOTLIN_HOME}/lib/kotlin-preloader.jar" "org.jetbrains.kotlin.preloading.Preloader" "-cp" "${KOTLIN_HOME}/lib/kotlin-compiler.jar" $KOTLIN_COMPILER)
 fi
 
-"${JAVACMD:=java}" $JAVA_OPTS "${java_args[@]}" -cp "${kotlin_app[@]}" "${kotlin_args[@]}"
+DIR="${BASH_SOURCE[0]%/*}"
+: ${DIR:="."}
+
+"${DIR}"/kotlin-compiler $JAVA_OPTS "${java_args[@]}" $KOTLIN_COMPILER "${kotlin_args[@]}"
