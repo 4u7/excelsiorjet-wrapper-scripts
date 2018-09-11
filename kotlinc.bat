@@ -28,8 +28,8 @@ rem We use the value of the JAVA_OPTS environment variable if defined
 if "%JAVA_OPTS%"=="" set JAVA_OPTS=-Xmx256M -Xms32M
 
 if not "%_KOTLIN_RUNNER%"=="" (
-	echo "Kotlin runner is not supported."
-	Exit /B 1
+  "%_JAVACMD%" %JAVA_OPTS% "-Dkotlin.home=%_KOTLIN_HOME%" -cp "%_KOTLIN_HOME%\lib\kotlin-runner.jar" ^
+    org.jetbrains.kotlin.runner.Main %*
 ) else (
 	%~dps0kotlin-compiler %JAVA_OPTS% %_KOTLIN_COMPILER% %*
 )
